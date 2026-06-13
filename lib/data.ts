@@ -222,9 +222,9 @@ export type Certification = {
 };
 
 export const certifications: Certification[] = [
-  { name: "Auth0 Certified Developer", issuer: "Okta / Auth0", year: "2026", icon: KeyRound },
-  { name: "CompTIA Security+", issuer: "CompTIA", year: "2025", icon: ShieldCheck },
-  { name: "Cloud Digital Leader", issuer: "Google", year: "2025", icon: Cloud },
+  { name: "Auth0 Certified Developer", issuer: "Okta / Auth0", year: "May 2026", icon: KeyRound },
+  { name: "CompTIA Security+", issuer: "CompTIA", year: "Oct 2025", icon: ShieldCheck },
+  { name: "Cloud Digital Leader", issuer: "Google", year: "Jun 2025", icon: Cloud },
 ];
 
 export const education = {
