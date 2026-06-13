@@ -31,7 +31,7 @@ export function Nav() {
       <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
         <a href="#top" aria-label="Home" className="inline-flex items-center">
           {/* Placeholder brand mark — matches the favicon. */}
-          <span className="inline-flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#F59E4B] to-[#E2702F]">
+          <span className="inline-flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#3B5FBF] to-[#1E3A8A]">
             <svg
               viewBox="0 0 32 32"
               className="size-5"

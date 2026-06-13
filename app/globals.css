@@ -4,70 +4,72 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Warm, dynamic theme — light-orange accent over a warm neutral base.
-  Colors expressed in oklch for smooth light/dark parity.
+  Cool, refined theme — dark-blue accent with black + silver supporting tones
+  over a mostly-white backdrop. Colors in oklch for smooth light/dark parity.
 */
 :root {
   --radius: 0.75rem;
 
-  --background: oklch(0.99 0.006 75);
-  --foreground: oklch(0.24 0.02 60);
+  --background: oklch(0.99 0.002 255);
+  --foreground: oklch(0.2 0.022 262);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.02 60);
+  --card-foreground: oklch(0.2 0.022 262);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.02 60);
+  --popover-foreground: oklch(0.2 0.022 262);
 
-  /* Single accent color — warm light orange */
-  --primary: oklch(0.7 0.165 52);
-  --primary-foreground: oklch(0.99 0.012 80);
+  /* Main accent — deep dark blue */
+  --primary: oklch(0.42 0.16 258);
+  --primary-foreground: oklch(0.99 0.005 250);
 
-  --secondary: oklch(0.97 0.01 70);
-  --secondary-foreground: oklch(0.3 0.02 60);
+  /* Supporting — silver neutrals */
+  --secondary: oklch(0.96 0.004 250);
+  --secondary-foreground: oklch(0.3 0.02 262);
 
-  --muted: oklch(0.97 0.01 70);
-  --muted-foreground: oklch(0.55 0.022 60);
+  --muted: oklch(0.96 0.004 250);
+  --muted-foreground: oklch(0.5 0.015 258);
 
-  --accent: oklch(0.95 0.04 65);
-  --accent-foreground: oklch(0.5 0.15 50);
+  --accent: oklch(0.93 0.025 255);
+  --accent-foreground: oklch(0.42 0.16 258);
 
   --destructive: oklch(0.58 0.22 27);
-  --destructive-foreground: oklch(0.99 0.012 80);
+  --destructive-foreground: oklch(0.99 0.005 250);
 
-  --border: oklch(0.92 0.01 70);
-  --input: oklch(0.92 0.01 70);
-  --ring: oklch(0.7 0.165 52);
+  --border: oklch(0.9 0.005 255);
+  --input: oklch(0.9 0.005 255);
+  --ring: oklch(0.42 0.16 258);
 }
 
 .dark {
-  --background: oklch(0.17 0.012 60);
-  --foreground: oklch(0.96 0.006 75);
+  --background: oklch(0.18 0.015 262);
+  --foreground: oklch(0.96 0.004 250);
 
-  --card: oklch(0.21 0.014 60);
-  --card-foreground: oklch(0.96 0.006 75);
+  --card: oklch(0.22 0.018 262);
+  --card-foreground: oklch(0.96 0.004 250);
 
-  --popover: oklch(0.21 0.014 60);
-  --popover-foreground: oklch(0.96 0.006 75);
+  --popover: oklch(0.22 0.018 262);
+  --popover-foreground: oklch(0.96 0.004 250);
 
-  --primary: oklch(0.76 0.16 58);
-  --primary-foreground: oklch(0.2 0.04 50);
+  /* Brightened dark blue so it reads on a dark surface */
+  --primary: oklch(0.62 0.16 258);
+  --primary-foreground: oklch(0.16 0.02 262);
 
-  --secondary: oklch(0.27 0.014 60);
-  --secondary-foreground: oklch(0.96 0.006 75);
+  --secondary: oklch(0.27 0.015 262);
+  --secondary-foreground: oklch(0.96 0.004 250);
 
-  --muted: oklch(0.27 0.014 60);
-  --muted-foreground: oklch(0.71 0.016 65);
+  --muted: oklch(0.27 0.015 262);
+  --muted-foreground: oklch(0.7 0.012 255);
 
-  --accent: oklch(0.33 0.06 55);
-  --accent-foreground: oklch(0.84 0.1 62);
+  --accent: oklch(0.32 0.05 258);
+  --accent-foreground: oklch(0.8 0.1 258);
 
   --destructive: oklch(0.66 0.2 25);
-  --destructive-foreground: oklch(0.96 0.006 75);
+  --destructive-foreground: oklch(0.96 0.004 250);
 
-  --border: oklch(0.31 0.012 60);
-  --input: oklch(0.33 0.012 60);
-  --ring: oklch(0.76 0.16 58);
+  --border: oklch(0.3 0.012 262);
+  --input: oklch(0.32 0.012 262);
+  --ring: oklch(0.62 0.16 258);
 }
 
 @theme inline {

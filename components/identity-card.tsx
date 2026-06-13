@@ -14,7 +14,7 @@ function toKey(label: string) {
 const MUTED = "text-muted-foreground";
 const KEY = "text-sky-600 dark:text-sky-400";
 const STRING = "text-foreground";
-const NUM = "text-amber-600 dark:text-amber-400";
+const NUM = "text-blue-700 dark:text-blue-400";
 const OK = "text-emerald-600 dark:text-emerald-400";
 
 /** Build the colored token stream for the decoded auth payload. */
