@@ -1,6 +1,6 @@
-import { GraduationCap } from "lucide-react";
-
-import { about, education } from "@/lib/data";
+import { about } from "@/lib/data";
+import { CountUp } from "@/components/count-up";
+import { IdentityCard } from "@/components/identity-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,39 +21,27 @@ export function About() {
           ))}
         </div>
 
-        <div className="space-y-3">
+        <div>
           <Reveal>
-            <Card>
-              <CardContent className="grid gap-4 p-6">
-                {about.facts.map((fact) => (
-                  <div key={fact.label}>
-                    <dt className="text-xs uppercase tracking-wider text-muted-foreground">
-                      {fact.label}
-                    </dt>
-                    <dd className="mt-0.5 font-medium">{fact.value}</dd>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <Card>
-              <CardContent className="flex items-start gap-3 p-6">
-                <GraduationCap className="mt-0.5 size-5 shrink-0 text-primary" />
-                <div>
-                  <p className="font-medium">{education.degree}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {education.minor}
-                  </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {education.school} · GPA {education.gpa} · {education.year}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <IdentityCard facts={about.facts} />
           </Reveal>
         </div>
+      </div>
+
+      {/* Headline metrics, counting up on scroll. */}
+      <div className="mt-10 grid gap-4 sm:grid-cols-3">
+        {about.metrics.map((m, i) => (
+          <Reveal key={m.label} delay={i * 0.08}>
+            <Card>
+              <CardContent className="p-6">
+                <div className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
+                  <CountUp value={m.value} prefix={m.prefix} suffix={m.suffix} />
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground">{m.label}</p>
+              </CardContent>
+            </Card>
+          </Reveal>
+        ))}
       </div>
     </section>
   );

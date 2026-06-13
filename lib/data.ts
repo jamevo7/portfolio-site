@@ -32,12 +32,19 @@ export const about = {
     "My work lives at the intersection of identity, customer trust, and engineering: triaging complex issues through API debugging and log analysis, and building AI-powered internal tooling — including MCP servers and Slack automation agents — to make teams faster.",
     "I hold a B.S. in Management Information Systems with a minor in Computer Science from San Jose State, and I'm an Auth0 Certified Developer.",
   ],
-  // Quick facts surfaced beside the bio.
+  // Quick facts surfaced beside the bio, rendered as a decoded auth payload.
   facts: [
     { label: "Currently", value: "TAM @ Okta (Auth0)" },
     { label: "Focus", value: "Identity & Security" },
     { label: "Based in", value: "San Francisco, CA" },
     { label: "Open to", value: "Coffee chats & collaboration" },
+  ],
+  // Headline metrics, animated as count-up tiles. `value` is the target number;
+  // `prefix`/`suffix` decorate it (e.g. "$" + 17 + "M+").
+  metrics: [
+    { value: 17, prefix: "$", suffix: "M+", label: "Book of business" },
+    { value: 100, prefix: "", suffix: "%", label: "Contract renewals" },
+    { value: 30, prefix: "", suffix: "+", label: "Enterprise accounts" },
   ],
 } as const;
 
