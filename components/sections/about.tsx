@@ -28,8 +28,9 @@ export function About() {
         </div>
       </div>
 
-      {/* Headline metrics, counting up on scroll. */}
-      <div className="mt-10 grid gap-4 sm:grid-cols-3">
+      {/* Headline metrics, counting up on scroll. Gap mirrors the grid above so
+          the third card lines up as one column with the identity card. */}
+      <div className="mt-10 grid gap-4 sm:grid-cols-3 md:gap-10">
         {about.metrics.map((m, i) => (
           <Reveal key={m.label} delay={i * 0.08}>
             <Card>
