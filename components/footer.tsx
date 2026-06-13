@@ -13,10 +13,21 @@ export function Footer() {
   return (
     <footer className="border-t border-border/60">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
-        <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} {profile.name}. Built with Next.js &
-          Tailwind CSS.
-        </p>
+        <div className="flex flex-col items-center gap-1.5 sm:items-start">
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} {profile.name}. Built with Next.js
+            & Tailwind CSS.
+          </p>
+          <p className="font-mono text-xs text-muted-foreground/70">
+            psst — my resume is an API:{" "}
+            <a
+              href="/api/resume"
+              className="underline decoration-dotted underline-offset-2 transition-colors hover:text-foreground"
+            >
+              curl /api/resume
+            </a>
+          </p>
+        </div>
         <div className="flex items-center gap-1">
           {socials.map(({ label, href, Icon }) => (
             <a
