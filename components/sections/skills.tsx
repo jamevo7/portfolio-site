@@ -1,4 +1,6 @@
-import { certifications, skills } from "@/lib/data";
+import { GraduationCap } from "lucide-react";
+
+import { certifications, education, skills } from "@/lib/data";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +39,31 @@ export function Skills() {
           <div className="space-y-4">
             <Reveal>
               <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Education
+              </h3>
+            </Reveal>
+            <Reveal>
+              <Card>
+                <CardContent className="flex items-start gap-4 p-5">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <GraduationCap className="size-5" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{education.degree}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {education.minor}
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {education.school} · Class of {education.year} · GPA{" "}
+                      {education.gpa}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </Reveal>
+
+            <Reveal>
+              <h3 className="mb-3 mt-8 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 Certifications
               </h3>
             </Reveal>
