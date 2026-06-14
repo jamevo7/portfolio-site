@@ -18,6 +18,7 @@
 
 import { NextResponse } from "next/server";
 
+import { getClientIp } from "@/lib/client-ip";
 import { rateLimit } from "@/lib/rate-limit";
 import {
   isResumeSection,
@@ -39,12 +40,6 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers": "Accept, Content-Type",
 };
-
-function getClientIp(req: Request): string {
-  const fwd = req.headers.get("x-forwarded-for");
-  if (fwd) return fwd.split(",")[0]!.trim();
-  return req.headers.get("x-real-ip") ?? "unknown";
-}
 
 /** Resolve the desired format from `?format=` then `Accept`, defaulting to JSON. */
 function resolveFormat(req: Request): "json" | "txt" {
@@ -105,12 +100,19 @@ export async function GET(req: Request) {
     const requested = sectionParam
       .split(",")
       .map((s) => s.trim().toLowerCase())
-      .filter(Boolean);
+      .filter(Boolean)
+      // There are only 6 valid sections; cap parsing so a giant `?section=`
+      // can't blow up the array (or the echoed error below).
+      .slice(0, RESUME_SECTIONS.length * 2);
     const invalid = requested.filter((s) => !isResumeSection(s));
     if (invalid.length > 0) {
+      // The response is JSON + nosniff (not HTML), so this isn't an XSS sink,
+      // but still don't reflect unbounded/long caller input back verbatim.
+      const shown = invalid.slice(0, 5).map((s) => s.slice(0, 32));
+      const more = invalid.length > shown.length ? ", …" : "";
       return NextResponse.json(
         {
-          error: `Unknown section(s): ${invalid.join(", ")}.`,
+          error: `Unknown section(s): ${shown.join(", ")}${more}.`,
           validSections: RESUME_SECTIONS,
         },
         { status: 400, headers: { ...CORS, ...rateHeaders } }

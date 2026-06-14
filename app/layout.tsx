@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -31,7 +32,7 @@ const siteUrl = "https://jamesvo.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${profile.name} — ${profile.title}`,
+    default: "James' Portfolio Site",
     template: `%s — ${profile.name}`,
   },
   description:
@@ -67,17 +68,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Per-request nonce set by middleware.ts; forwarded to next-themes so its
+  // inline theme script satisfies our nonce-based CSP (no 'unsafe-inline').
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider
+          nonce={nonce}
           attribute="class"
           defaultTheme="system"
           enableSystem

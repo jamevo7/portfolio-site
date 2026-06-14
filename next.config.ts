@@ -1,32 +1,13 @@
 import type { NextConfig } from "next";
 
-const isDev = process.env.NODE_ENV !== "production";
-
 /**
- * Content-Security-Policy.
- * - 'unsafe-inline' on script/style is needed because Next.js injects inline
- *   bootstrap scripts/styles and we're not wiring up per-request nonces.
- * - Dev additionally needs 'unsafe-eval' and websocket connections for HMR.
- * - Fonts are self-hosted by next/font (same origin), so no external font host.
+ * Static security headers applied to every response.
+ *
+ * Content-Security-Policy is intentionally NOT here — it carries a per-request
+ * nonce and is set in middleware.ts instead. Defining it statically too would
+ * send two CSP headers, which browsers intersect, breaking the nonce policy.
  */
-const csp = [
-  `default-src 'self'`,
-  `base-uri 'self'`,
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
-  `style-src 'self' 'unsafe-inline'`,
-  `img-src 'self' data: blob:`,
-  `font-src 'self'`,
-  `connect-src 'self'${isDev ? " ws:" : ""}`,
-  `frame-ancestors 'none'`,
-  `form-action 'self'`,
-  `object-src 'none'`,
-  `upgrade-insecure-requests`,
-]
-  .join("; ")
-  .concat(";");
-
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: csp },
   // Force HTTPS for 2 years (ignored over plain HTTP, e.g. localhost).
   {
     key: "Strict-Transport-Security",

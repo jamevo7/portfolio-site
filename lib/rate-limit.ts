@@ -12,6 +12,12 @@ type Entry = { count: number; reset: number };
 
 const store = new Map<string, Entry>();
 
+// Hard cap on tracked keys. Even with a trustworthy client IP, a large botnet
+// (or a misconfigured proxy) could otherwise grow this map without bound and
+// exhaust process memory. 10k distinct IPs per window is far beyond legitimate
+// traffic for this site, so the cap only ever bites under abuse.
+const MAX_KEYS = 10_000;
+
 export type RateLimitResult = {
   ok: boolean;
   remaining: number;
@@ -28,6 +34,8 @@ export function rateLimit(
 
   // New window (or first request for this key).
   if (!entry || now > entry.reset) {
+    // Adding a brand-new key? Make sure we stay within the memory budget first.
+    if (!entry) ensureCapacity(now);
     store.set(key, { count: 1, reset: now + windowMs });
     pruneOccasionally(now);
     return { ok: true, remaining: limit - 1, retryAfter: 0 };
@@ -53,5 +61,20 @@ function pruneOccasionally(now: number) {
   lastPrune = now;
   for (const [key, entry] of store) {
     if (now > entry.reset) store.delete(key);
+  }
+}
+
+// Enforce the hard cap before inserting a new key. First reclaim anything that
+// has already expired; if we're still at the limit, evict oldest-inserted keys
+// (Map preserves insertion order) so memory stays bounded under abuse.
+function ensureCapacity(now: number) {
+  if (store.size < MAX_KEYS) return;
+  for (const [key, entry] of store) {
+    if (now > entry.reset) store.delete(key);
+  }
+  while (store.size >= MAX_KEYS) {
+    const oldest = store.keys().next().value;
+    if (oldest === undefined) break;
+    store.delete(oldest);
   }
 }
