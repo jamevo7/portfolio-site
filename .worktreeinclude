@@ -1,0 +1,4 @@
+# Files that are NOT tracked by git but must be copied into every new worktree.
+# (node_modules is intentionally excluded — run `npm install` per worktree.)
+# Consumed by scripts/new-worktree.sh.
+.env
