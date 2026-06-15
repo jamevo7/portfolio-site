@@ -17,8 +17,8 @@ export function Projects() {
   return (
     <section id="projects" className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
       <SectionHeading
-        eyebrow="03 / Projects"
-        title="Things I've built"
+        eyebrow="02 / Projects"
+        title="Featured Projects"
         description="A selection of projects spanning identity tooling, automation, and full-stack web."
       />
 

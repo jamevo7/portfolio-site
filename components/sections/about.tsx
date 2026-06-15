@@ -1,9 +1,9 @@
-import { about } from "@/lib/data";
-import { CountUp } from "@/components/count-up";
+import { ArrowUpRight } from "lucide-react";
+
+import { about, career, profile } from "@/lib/data";
 import { IdentityCard } from "@/components/identity-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { Card, CardContent } from "@/components/ui/card";
 
 export function About() {
   return (
@@ -19,6 +19,28 @@ export function About() {
               </p>
             </Reveal>
           ))}
+
+          {/* Career snapshot — the resume owns the detail, this is a nod. */}
+          <Reveal delay={about.paragraphs.length * 0.08}>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Previously</span>
+              {career.map((c) => (
+                <span key={c.company} className="inline-flex items-center gap-1.5">
+                  <span className="size-1 rounded-full bg-primary/50" />
+                  {c.company}
+                  <span className="text-muted-foreground/60">{c.period}</span>
+                </span>
+              ))}
+              <a
+                href={profile.resumeHref}
+                download
+                className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+              >
+                Full history on my resume
+                <ArrowUpRight className="size-3.5" />
+              </a>
+            </div>
+          </Reveal>
         </div>
 
         <div>
@@ -26,23 +48,6 @@ export function About() {
             <IdentityCard facts={about.facts} />
           </Reveal>
         </div>
-      </div>
-
-      {/* Headline metrics, counting up on scroll. Gap mirrors the grid above so
-          the third card lines up as one column with the identity card. */}
-      <div className="mt-10 grid gap-4 sm:grid-cols-3 md:gap-10">
-        {about.metrics.map((m, i) => (
-          <Reveal key={m.label} delay={i * 0.08}>
-            <Card>
-              <CardContent className="p-6">
-                <div className="font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
-                  <CountUp value={m.value} prefix={m.prefix} suffix={m.suffix} />
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">{m.label}</p>
-              </CardContent>
-            </Card>
-          </Reveal>
-        ))}
       </div>
     </section>
   );
