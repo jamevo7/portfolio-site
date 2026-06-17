@@ -8,7 +8,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="border-t border-border/60 bg-muted/30"
+      className=""
     >
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <SectionHeading
