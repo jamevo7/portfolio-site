@@ -51,7 +51,7 @@ export function DecipherText({
     const last = Math.max(1, chars.length - 1);
     // Total scramble span grows gently with length, capped so long sentences
     // don't drag on. Kept short so glyphs settle quickly.
-    const span = Math.min(36 + chars.length * 2.2, 120);
+    const span = Math.min(41 + chars.length * 2.53, 138);
     // Each glyph flickers from frame 0 until its `end`, locking in left→right.
     // The convex easing (t^1.9) widens the gap between successive locks, so the
     // reveal starts quick and decelerates — slower and slower toward the end.
