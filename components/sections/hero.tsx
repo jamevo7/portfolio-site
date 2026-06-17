@@ -7,6 +7,7 @@ import { profile } from "@/lib/data";
 import { EASE_OUT } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { HeroBackdrop } from "@/components/hero-backdrop";
+import { QuantumGrid } from "@/components/quantum-grid";
 import { DecipherText } from "@/components/decipher-text";
 
 export function Hero() {
@@ -27,6 +28,8 @@ export function Hero() {
     <section className="relative overflow-hidden">
       {/* Animated aurora + blueprint grid */}
       <HeroBackdrop />
+      {/* Quantum-fluctuation cells lighting up over the grid */}
+      <QuantumGrid />
       <div className="mx-auto flex min-h-[88vh] max-w-5xl items-center px-4 pt-16 sm:px-6">
         <div className="flex w-full flex-col items-center gap-12 md:flex-row md:justify-between md:gap-10">
         <motion.div

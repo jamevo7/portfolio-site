@@ -50,24 +50,33 @@ export function DecipherText({
     const chars = text.split("");
     const last = Math.max(1, chars.length - 1);
     // Total scramble span grows gently with length, capped so long sentences
-    // don't drag on. Kept short so glyphs settle quickly.
+    // don't drag on. Expressed in 60fps-frame units (see FRAME_MS below).
     const span = Math.min(41 + chars.length * 2.53, 138);
-    // Each glyph flickers from frame 0 until its `end`, locking in left→right.
-    // The convex easing (t^1.9) widens the gap between successive locks, so the
-    // reveal starts quick and decelerates — slower and slower toward the end.
+    // Each glyph flickers until its `end`, then locks in left→right. The convex
+    // easing (t^1.6) widens the gap between successive locks, so the reveal
+    // starts quick and decelerates. Each glyph gets its own flicker cadence and
+    // phase so the scramble shimmers smoothly rather than flipping in lockstep.
     const queue = chars.map((to, i) => {
       const eased = Math.pow(i / last, 1.6);
       return {
         to,
         end: Math.round(span * eased) + 6 + Math.floor(Math.random() * 6),
         char: randHex(),
+        flick: 45 + Math.random() * 40, // ms between hex swaps for this glyph
+        nextFlip: Math.random() * 50, // initial phase offset (ms)
       };
     });
 
-    let frame = 0;
+    // Drive progress from elapsed real time, not a per-frame counter, so the
+    // pace is identical across refresh rates and stays smooth if frames drop.
+    const FRAME_MS = 1000 / 60;
+    let start = 0;
     let raf = 0;
 
-    const tick = () => {
+    const tick = (now: number) => {
+      if (!start) start = now;
+      const elapsed = now - start;
+      const frame = elapsed / FRAME_MS;
       let done = 0;
       const next = queue.map((q) => {
         if (q.to === " ") return { char: " ", settled: true };
@@ -75,13 +84,15 @@ export function DecipherText({
           done++;
           return { char: q.to, settled: true };
         }
-        // Slow flicker rate keeps individual glyphs readable during scramble.
-        if (Math.random() < 0.1) q.char = randHex();
+        // Steady per-glyph cadence keeps the flicker smooth and rhythmic.
+        if (elapsed >= q.nextFlip) {
+          q.char = randHex();
+          q.nextFlip = elapsed + q.flick;
+        }
         return { char: q.char, settled: false };
       });
       setCells(next);
       if (done === queue.length) return;
-      frame++;
       raf = requestAnimationFrame(tick);
     };
 

@@ -140,3 +140,13 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* Quote-strip marquee — list is duplicated, so -50% loops seamlessly. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

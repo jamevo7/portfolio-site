@@ -4,11 +4,13 @@ import { Projects } from "@/components/sections/projects";
 import { Community } from "@/components/sections/community";
 import { Skills } from "@/components/sections/skills";
 import { Contact } from "@/components/sections/contact";
+import { QuoteStrip } from "@/components/quote-strip";
 
 export default function Home() {
   return (
     <>
       <Hero />
+      <QuoteStrip />
       <About />
       <Projects />
       <Community />
