@@ -3,42 +3,45 @@
 import type { LucideIcon } from "lucide-react";
 import { Cloud, KeyRound, ShieldCheck } from "lucide-react";
 
-export type SkillGroup = { label: string; items: string[] };
+// `items` stays a plain string[] (the resume API serializes it directly).
+// `core` is a subset of `items` rendered as the solid "core stack" — adjust
+// which entries are core to match how you'd actually weight them.
+export type SkillGroup = { label: string; items: string[]; core?: string[] };
 
 export const skills: SkillGroup[] = [
   {
-    label: "Development",
-    items: [
-      "Java",
-      "Python",
-      "JavaScript",
-      "TypeScript",
-      "SQL",
-      "HTML",
-      "CSS",
-      "Go",
-      "React.js",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-    ],
+    label: "Languages",
+    items: ["Python", "TypeScript", "JavaScript", "Java", "Go", "SQL"],
+    core: ["Python", "TypeScript", "JavaScript"],
+  },
+  {
+    label: "Frontend",
+    items: ["React.js", "HTML", "CSS"],
+    core: ["React.js"],
+  },
+  {
+    label: "Backend & Data",
+    items: ["Node.js", "Express.js", "REST APIs", "MongoDB"],
+    core: ["Node.js", "REST APIs"],
+  },
+  {
+    label: "Cloud & Identity",
+    items: ["AWS", "Auth0", "GenAI"],
+    core: ["Auth0", "AWS"],
   },
   {
     label: "Tools & Platforms",
     items: [
-      "AWS",
-      "Auth0",
+      "GitHub",
       "Postman",
-      "REST APIs",
-      "GenAI",
-      "Looker",
-      "Tableau",
-      "Salesforce",
       "Jira",
       "Confluence",
-      "GitHub",
       "Agile",
+      "Salesforce",
+      "Looker",
+      "Tableau",
     ],
+    core: ["GitHub", "Postman"],
   },
 ];
 
