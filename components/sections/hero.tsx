@@ -24,7 +24,7 @@ export function Hero() {
   };
 
   return (
-    <section className="dark relative overflow-hidden bg-background">
+    <section className="relative overflow-hidden">
       {/* Animated aurora + blueprint grid */}
       <HeroBackdrop />
       <div className="mx-auto flex min-h-[88vh] max-w-5xl items-center px-4 pt-16 sm:px-6">
