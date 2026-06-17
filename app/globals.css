@@ -39,6 +39,10 @@
   --border: oklch(0.9 0.005 255);
   --input: oklch(0.9 0.005 255);
   --ring: oklch(0.42 0.16 258);
+
+  /* Warm brand accent — amber/ochre. Used sparingly (blueprint margin notes,
+     link hovers, status pulse) over the cool blue base. See Notion Brand Hub. */
+  --brand-amber: #e0a24e;
 }
 
 .dark {
@@ -70,6 +74,9 @@
   --border: oklch(0.3 0.012 262);
   --input: oklch(0.32 0.012 262);
   --ring: oklch(0.62 0.16 258);
+
+  /* Lifted slightly so amber stays legible on dark surfaces. */
+  --brand-amber: #e6ad5c;
 }
 
 @theme inline {
@@ -92,10 +99,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-brand-amber: var(--brand-amber);
 
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
+  --font-script: var(--font-script);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

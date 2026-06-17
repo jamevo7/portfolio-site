@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { Inter, Sora, JetBrains_Mono } from "next/font/google";
+import { Inter, Sora, JetBrains_Mono, Caveat } from "next/font/google";
 import "./globals.css";
 
 import { profile } from "@/lib/data";
@@ -24,6 +24,13 @@ const sora = Sora({
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Handwriting accent — used only for the warm margin notes on blueprint covers.
+const caveat = Caveat({
+  variable: "--font-script",
   subsets: ["latin"],
   display: "swap",
 });
@@ -81,7 +88,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} ${caveat.variable} font-sans antialiased`}
       >
         <ThemeProvider
           nonce={nonce}
