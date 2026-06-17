@@ -56,10 +56,10 @@ export function DecipherText({
     // The convex easing (t^1.9) widens the gap between successive locks, so the
     // reveal starts quick and decelerates — slower and slower toward the end.
     const queue = chars.map((to, i) => {
-      const eased = Math.pow(i / last, 1.9);
+      const eased = Math.pow(i / last, 1.6);
       return {
         to,
-        end: Math.round(span * eased) + 6 + Math.floor(Math.random() * 8),
+        end: Math.round(span * eased) + 6 + Math.floor(Math.random() * 6),
         char: randHex(),
       };
     });
@@ -75,7 +75,8 @@ export function DecipherText({
           done++;
           return { char: q.to, settled: true };
         }
-        if (Math.random() < 0.25) q.char = randHex();
+        // Slow flicker rate keeps individual glyphs readable during scramble.
+        if (Math.random() < 0.1) q.char = randHex();
         return { char: q.char, settled: false };
       });
       setCells(next);
@@ -102,7 +103,10 @@ export function DecipherText({
         <span
           key={i}
           aria-hidden
-          className={cn(!cell.settled && scrambleClassName)}
+          className={cn(
+            "transition-opacity duration-300",
+            cell.settled ? "opacity-100" : cn("opacity-50", scrambleClassName),
+          )}
         >
           {cell.char === " " ? " " : cell.char}
         </span>
