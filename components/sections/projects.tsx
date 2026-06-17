@@ -15,7 +15,8 @@ import {
 
 export function Projects() {
   return (
-    <section id="projects" className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+    <section id="projects" className="bg-muted/30">
+      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
       <SectionHeading
         eyebrow="02 / Projects"
         title="Featured Projects"
@@ -95,6 +96,7 @@ export function Projects() {
           coming soon.
         </p>
       </Reveal>
+      </div>
     </section>
   );
 }

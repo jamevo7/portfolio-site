@@ -7,7 +7,8 @@ import { SectionHeading } from "@/components/section-heading";
 
 export function About() {
   return (
-    <section id="about" className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+    <section id="about">
+      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
       <SectionHeading eyebrow="01 / About" title="A bit about me" />
 
       <div className="grid gap-10 md:grid-cols-3">
@@ -48,6 +49,7 @@ export function About() {
             <IdentityCard facts={about.facts} />
           </Reveal>
         </div>
+      </div>
       </div>
     </section>
   );

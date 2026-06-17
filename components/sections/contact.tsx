@@ -64,7 +64,8 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+    <section id="contact">
+      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
       <SectionHeading
         eyebrow="05 / Contact"
         title="Let's talk"
@@ -170,6 +171,7 @@ export function Contact() {
             </Button>
           </form>
         </Reveal>
+      </div>
       </div>
     </section>
   );

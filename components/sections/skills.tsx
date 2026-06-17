@@ -10,7 +10,7 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className=""
+      className="bg-muted/30"
     >
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <SectionHeading
