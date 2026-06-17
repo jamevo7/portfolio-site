@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function Community() {
   return (
-    <section id="community">
+    <section id="community" className="border-t border-border/60">
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <SectionHeading
           eyebrow="03 / Community"
