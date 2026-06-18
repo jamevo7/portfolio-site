@@ -6,6 +6,7 @@ import "./globals.css";
 import { profile } from "@/lib/data";
 import { ThemeProvider } from "@/components/theme-provider";
 import { PageGrid } from "@/components/page-grid";
+import { PageAura } from "@/components/page-aura";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -97,6 +98,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <PageAura />
           <PageGrid />
           <Nav />
           <main id="top">{children}</main>
