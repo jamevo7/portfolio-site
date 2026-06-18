@@ -19,14 +19,9 @@ import { NextResponse, type NextRequest } from "next/server";
  */
 const isDev = process.env.NODE_ENV !== "production";
 
-export function middleware(request: NextRequest) {
-  const nonce = btoa(crypto.randomUUID());
-
-  const scriptSrc = isDev
-    ? `script-src 'self' 'unsafe-inline' 'unsafe-eval'`
-    : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`;
-
-  const csp =
+/** Assemble the policy string for a given `script-src` directive. */
+function buildCsp(scriptSrc: string): string {
+  return (
     [
       `default-src 'self'`,
       `base-uri 'self'`,
@@ -39,10 +34,32 @@ export function middleware(request: NextRequest) {
       `form-action 'self'`,
       `object-src 'none'`,
       `upgrade-insecure-requests`,
-    ].join("; ") + ";";
+    ].join("; ") + ";"
+  );
+}
 
-  // The CSP must be on the *request* headers for Next.js to discover the nonce
-  // and apply it to framework scripts; `x-nonce` lets our layout reuse it.
+export function middleware(request: NextRequest) {
+  // Dev: emit a permissive policy on the RESPONSE only. We must NOT rewrite the
+  // *request* headers in dev — doing so routes Next's internal RSC/devtools
+  // fetches (e.g. the 15.5 Segment Explorer) through a modified request and
+  // destabilises its client manifest, surfacing as intermittent
+  // "Could not find the module … in the React Client Manifest" 500s on '/'.
+  // Nonce discovery via request headers is only needed in production anyway.
+  if (isDev) {
+    const response = NextResponse.next();
+    response.headers.set(
+      "content-security-policy",
+      buildCsp(`script-src 'self' 'unsafe-inline' 'unsafe-eval'`)
+    );
+    return response;
+  }
+
+  // Prod: strict, nonce-based policy. The CSP must be on the *request* headers
+  // for Next.js to discover the nonce and stamp it onto framework scripts;
+  // `x-nonce` lets our root layout forward the same nonce to next-themes.
+  const nonce = btoa(crypto.randomUUID());
+  const csp = buildCsp(`script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`);
+
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set("content-security-policy", csp);
