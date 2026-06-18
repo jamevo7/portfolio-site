@@ -1,6 +1,7 @@
 "use client";
 
 import { projects } from "@/lib/data";
+import { SECTION_SHELL } from "@/lib/section";
 import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
@@ -8,7 +9,7 @@ import { SectionHeading } from "@/components/section-heading";
 export function Projects() {
   return (
     <section id="projects" className="bg-muted/30">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+      <div className={SECTION_SHELL}>
         <SectionHeading
           eyebrow="02 / Projects"
           title="Featured Projects"

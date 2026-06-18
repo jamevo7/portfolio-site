@@ -1,6 +1,7 @@
 import { ExternalLink } from "lucide-react";
 
 import { experience } from "@/lib/data";
+import { SECTION_SHELL } from "@/lib/section";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 
@@ -10,7 +11,7 @@ export function Experience() {
       id="experience"
       className=""
     >
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+      <div className={SECTION_SHELL}>
         <SectionHeading
           eyebrow="02 / Experience"
           title="Where I've worked"
