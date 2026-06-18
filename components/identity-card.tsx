@@ -44,11 +44,19 @@ function buildSegments(facts: readonly Fact[]): Segment[] {
 }
 
 /**
- * Renders the bio's quick facts as a "decoded" API auth response that types
- * itself out character-by-character on scroll — an identity-engineering motif.
- * Falls back to the full static payload under prefers-reduced-motion.
+ * Renders a set of facts as a "decoded" API auth response that types itself out
+ * on scroll — an identity-engineering motif. Doubles as the About timeline's
+ * inspector: changing `path`/`facts` (e.g. selecting a role) re-types the
+ * payload with the new content. Falls back to the full static payload under
+ * prefers-reduced-motion.
  */
-export function IdentityCard({ facts }: { facts: readonly Fact[] }) {
+export function IdentityCard({
+  facts,
+  path,
+}: {
+  facts: readonly Fact[];
+  path: string;
+}) {
   const reduce = useReducedMotion();
   const ref = React.useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -70,9 +78,10 @@ export function IdentityCard({ facts }: { facts: readonly Fact[] }) {
     }
 
     let raf = 0;
+    setRevealed(0);
     const start = performance.now();
-    // ~22ms/char, clamped so short and long payloads both feel natural.
-    const duration = Math.min(2600, Math.max(1000, total * 22));
+    // Snappy enough to click through roles without waiting on a long decode.
+    const duration = Math.min(1600, Math.max(700, total * 16));
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
       setRevealed(Math.floor(t * total));
@@ -81,7 +90,8 @@ export function IdentityCard({ facts }: { facts: readonly Fact[] }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, reduce, total]);
+    // Re-type whenever the payload changes (path is unique per selection).
+  }, [inView, reduce, total, path]);
 
   // Walk the token stream and render only the revealed prefix.
   let consumed = 0;
@@ -101,19 +111,20 @@ export function IdentityCard({ facts }: { facts: readonly Fact[] }) {
   return (
     <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
       {/* Terminal title bar */}
-      <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-2.5">
+      <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-2">
         <span className="size-3 rounded-full bg-red-400/80" />
         <span className="size-3 rounded-full bg-amber-400/80" />
         <span className="size-3 rounded-full bg-emerald-400/80" />
         <span className="ml-2 truncate font-mono text-xs text-muted-foreground">
-          GET /about/james.vo
+          GET {path}
         </span>
       </div>
 
-      {/* Decoded payload, typed out */}
+      {/* Decoded payload, typed out. Fixed min-height so switching roles (which
+          re-types different content) never resizes the card. */}
       <div
         ref={ref}
-        className="whitespace-pre-wrap p-5 font-mono text-[13px] leading-relaxed"
+        className="min-h-[13rem] whitespace-pre-wrap p-4 font-mono text-xs leading-snug"
       >
         {rendered}
         {!reduce && (

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import { profile } from "@/lib/data";
 import { contactSchema, type ContactInput } from "@/lib/contact-schema";
+import { SECTION_SHELL } from "@/lib/section";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ export function Contact() {
 
   return (
     <section id="contact">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+      <div className={SECTION_SHELL}>
       <SectionHeading
         eyebrow="05 / Contact"
         title="Let's talk"

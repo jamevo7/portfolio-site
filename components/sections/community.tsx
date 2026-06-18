@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 
 import { community } from "@/lib/data";
+import { SECTION_SHELL } from "@/lib/section";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export function Community() {
   return (
     <section id="community">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+      <div className={SECTION_SHELL}>
         <SectionHeading
           eyebrow="03 / Community"
           title="Beyond the work"

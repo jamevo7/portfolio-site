@@ -1,9 +1,11 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, useRef } from "react";
 
 /**
  * Full-bleed marquee of quotes that separates the hero from the About (01)
- * section. CSS-animated (cheap, pauses on hover, disabled by motion-reduce);
- * the list is duplicated so the -50% translate loops seamlessly.
+ * section. CSS-animated (cheap, slows to half speed on hover, disabled by
+ * motion-reduce); the list is duplicated so the -50% translate loops seamlessly.
  *
  * Placeholder copy for now — swap `quotes` for real testimonials + attribution.
  */
@@ -23,12 +25,27 @@ export function QuoteStrip() {
   // Duplicated so translateX(-50%) lands exactly one copy over — seamless loop.
   const loop = [...quotes, ...quotes];
 
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Scale the marquee speed via the Web Animations API instead of CSS hover.
+  // Setting playbackRate keeps the current position (no jump), where changing
+  // animation-duration would remap progress and visibly snap.
+  function setSpeed(rate: number) {
+    const anim = trackRef.current?.getAnimations()[0];
+    if (anim) anim.playbackRate = rate;
+  }
+
   return (
     <section
       aria-hidden
       className="overflow-hidden border-y bg-muted/30 py-3"
     >
-      <div className="flex w-max items-center animate-[marquee_49.5s_linear_infinite] hover:[animation-play-state:paused] motion-reduce:animate-none">
+      <div
+        ref={trackRef}
+        onMouseEnter={() => setSpeed(0.65)}
+        onMouseLeave={() => setSpeed(1)}
+        className="flex w-max items-center animate-[marquee_49.5s_linear_infinite] motion-reduce:animate-none"
+      >
         {loop.map((q, i) => (
           <Fragment key={i}>
             <span className="whitespace-nowrap px-6 font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground">

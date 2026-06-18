@@ -1,6 +1,7 @@
 import { GraduationCap } from "lucide-react";
 
 import { certifications, education, skills } from "@/lib/data";
+import { SECTION_SHELL } from "@/lib/section";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,7 @@ import { Card } from "@/components/ui/card";
 export function Skills() {
   return (
     <section id="skills" className="bg-muted/30">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
+      <div className={SECTION_SHELL}>
         <SectionHeading
           eyebrow="04 / Skills & Certifications"
           title="What I work with"
