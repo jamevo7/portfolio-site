@@ -1,55 +1,100 @@
+"use client";
+
+import * as React from "react";
 import { ArrowUpRight } from "lucide-react";
 
-import { about, career, profile } from "@/lib/data";
+import { about, profile, experience, type Experience } from "@/lib/data";
+import { SECTION_SHELL } from "@/lib/section";
 import { IdentityCard } from "@/components/identity-card";
+import { PhotoGallery } from "@/components/photo-gallery";
+import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 
+// Oldest → newest, so the timeline reads left-to-right.
+const NODES = [...experience].reverse();
+
+/** Turn a role into the identity-card payload, with a unique path per role. */
+function jobIdentity(job: Experience) {
+  const slug = job.company.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  return {
+    path: `/experience/${job.start.slice(-4)}/${slug}`,
+    facts: [
+      { label: "role", value: job.role },
+      { label: "company", value: job.company },
+      { label: "period", value: `${job.start} – ${job.end}` },
+      { label: "location", value: job.location },
+    ],
+  };
+}
+
 export function About() {
+  // null = default "about" payload; a number selects that role.
+  const [active, setActive] = React.useState<number | null>(null);
+
+  const identity =
+    active === null
+      ? { path: "/about/james.vo", facts: about.facts }
+      : jobIdentity(NODES[active]);
+
   return (
-    <section id="about">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
-      <SectionHeading eyebrow="01 / About" title="A bit about me" />
-
-      <div className="grid gap-10 md:grid-cols-3">
-        <div className="space-y-4 md:col-span-2">
-          {about.paragraphs.map((p, i) => (
-            <Reveal key={i} delay={i * 0.08}>
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {p}
-              </p>
-            </Reveal>
-          ))}
-
-          {/* Career snapshot — the resume owns the detail, this is a nod. */}
-          <Reveal delay={about.paragraphs.length * 0.08}>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Previously</span>
-              {career.map((c) => (
-                <span key={c.company} className="inline-flex items-center gap-1.5">
-                  <span className="size-1 rounded-full bg-primary/50" />
-                  {c.company}
-                  <span className="text-muted-foreground/60">{c.period}</span>
-                </span>
+    <section id="about" className="overflow-x-clip">
+      <div className={SECTION_SHELL}>
+        <div className="grid gap-10 md:grid-cols-3">
+          {/* Left column: heading sits with the bio so its top aligns with
+              the photo gallery in the right column. */}
+          <div className="md:col-span-2">
+            <SectionHeading eyebrow="01 / About" title="A bit about me" />
+            <div className="space-y-4">
+              {about.paragraphs.map((p, i) => (
+                <Reveal key={i} delay={i * 0.08}>
+                  <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    {p}
+                  </p>
+                </Reveal>
               ))}
+            </div>
+          </div>
+
+          {/* Right column: photo gallery above the identity card (which doubles
+              as the timeline inspector). Both keep a fixed size so neither
+              resizes as the card re-types a different role. */}
+          <div className="space-y-6">
+            <Reveal>
+              <PhotoGallery />
+            </Reveal>
+            <Reveal delay={0.08}>
+              <IdentityCard path={identity.path} facts={identity.facts} />
+            </Reveal>
+          </div>
+        </div>
+
+        {/* Work history as a thin interactive timeline; selecting a role drives
+            the identity card above. */}
+        <div className="mt-12">
+          <Reveal>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-primary/80">
+                Where I&apos;ve been
+              </h3>
               <a
                 href={profile.resumeHref}
                 download
-                className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+                className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
                 Full history on my resume
                 <ArrowUpRight className="size-3.5" />
               </a>
             </div>
           </Reveal>
-        </div>
-
-        <div>
-          <Reveal>
-            <IdentityCard facts={about.facts} />
+          <Reveal delay={0.08}>
+            <ExperienceTimeline
+              nodes={NODES}
+              active={active}
+              onSelect={(i) => setActive((p) => (p === i ? null : i))}
+            />
           </Reveal>
         </div>
-      </div>
       </div>
     </section>
   );
