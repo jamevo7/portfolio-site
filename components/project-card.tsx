@@ -37,9 +37,6 @@ export function ProjectCard({
     setFlipped((f) => !f);
   };
 
-  // Front teases the top wins; the full story lives on the back.
-  const frontHighlights = project.highlights.slice(0, 2);
-
   return (
     <div className="group h-full [perspective:1600px]">
       <motion.div
@@ -48,7 +45,7 @@ export function ProjectCard({
         transition={{ duration: reduce ? 0 : 0.6, ease: EASE_OUT }}
         className="relative h-full cursor-pointer rounded-xl [transform-style:preserve-3d]"
       >
-        {/* FRONT — info on top, blueprint cover on the bottom half. */}
+        {/* FRONT — info on the top half, blueprint cover on the bottom half. */}
         <div
           aria-hidden={flipped}
           className={cn(
@@ -56,44 +53,20 @@ export function ProjectCard({
             flipped && "pointer-events-none"
           )}
         >
-          <Card className="flex h-full flex-col overflow-hidden transition-shadow group-hover:shadow-md">
-            <div className="flex flex-1 flex-col p-5">
-              <div className="mb-1 flex items-start justify-between gap-3">
+          <Card className="flex h-full min-h-[34rem] flex-col overflow-hidden transition-shadow group-hover:shadow-md">
+            {/* min-h-0 + basis-0 lets this pane settle at exactly half the
+                tile, with the cover taking the other half. */}
+            <div className="flex min-h-0 flex-1 basis-0 flex-col p-5">
+              <div className="mb-2 flex items-start justify-between gap-3">
                 <h3 className="font-display text-lg font-semibold leading-tight tracking-tight">
                   {project.title}
                 </h3>
                 <FlipButton onClick={toggle} tabbable={!flipped} />
               </div>
-              {(project.role || project.period) && (
-                <p className="font-mono text-xs text-primary">
-                  {project.role}
-                  {project.role && project.period && " · "}
-                  {project.period}
-                </p>
-              )}
 
-              <ul className="mt-3 space-y-1.5">
-                {frontHighlights.map((h) => (
-                  <li
-                    key={h}
-                    className="flex items-start gap-2 text-sm text-foreground"
-                  >
-                    <span
-                      aria-hidden
-                      className="mt-[7px] size-1.5 shrink-0 rotate-45 bg-primary/80"
-                    />
-                    <span>{h}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-auto flex flex-wrap gap-2 pt-4">
-                {project.tech.map((t) => (
-                  <Badge key={t} variant="muted" className="font-mono">
-                    {t}
-                  </Badge>
-                ))}
-              </div>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {project.blurb}
+              </p>
             </div>
 
             <ProjectCover
@@ -101,7 +74,7 @@ export function ProjectCard({
               tag={project.tag}
               icon={project.icon}
               note={project.note}
-              className="h-40 shrink-0 border-t"
+              className="flex-1 border-t"
             />
           </Card>
         </div>
@@ -174,6 +147,14 @@ function BackFace({
         <p className="mt-3 flex-1 overflow-hidden text-sm leading-relaxed text-muted-foreground">
           {project.description}
         </p>
+
+        <div className="flex shrink-0 flex-wrap gap-2 pt-4">
+          {project.tech.map((t) => (
+            <Badge key={t} variant="muted" className="font-mono">
+              {t}
+            </Badge>
+          ))}
+        </div>
 
         <div className="flex shrink-0 gap-3 pt-4">
           <FlipLink

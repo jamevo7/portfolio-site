@@ -8,6 +8,8 @@ export type Experience = {
   location: string;
   href?: string;
   bullets: string[];
+  // Short takeaway surfaced in the About identity card. Dummy copy for now.
+  keyLearnings: string;
 };
 
 export const experience: Experience[] = [
@@ -18,6 +20,7 @@ export const experience: Experience[] = [
     end: "Present",
     location: "San Francisco, CA",
     href: "https://www.okta.com",
+    keyLearnings: "Turning deep technical detail into executive trust.",
     bullets: [
       "Own a $17M+ cARR book of business across 30+ enterprise accounts, driving Auth0 adoption to strengthen customer security posture and achieving a 100% contract renewal rate.",
       "Resolve complex customer-facing technical issues through API debugging, log analysis, and JavaScript/Auth0 configuration — partnering with Engineering and Product to close gaps and accelerate time-to-resolution.",
@@ -34,6 +37,7 @@ export const experience: Experience[] = [
     end: "Aug 2024",
     location: "San Francisco, CA",
     href: "https://www.okta.com",
+    keyLearnings: "Proactive docs prevent churn before renewals.",
     bullets: [
       "Drove a 27% increase in subscription renewals and a 24% decrease in churn by composing technical strategy documents on feature adoption and best practices for 5+ accounts.",
       "Collaborated cross-functionally with Engineering and Product to author technical strategy documentation.",
@@ -48,6 +52,7 @@ export const experience: Experience[] = [
     end: "Aug 2023",
     location: "San Jose, CA",
     href: "https://www.cisco.com",
+    keyLearnings: "Automation only matters if it drives decisions.",
     bullets: [
       "Delivered a 70% optimization on excess part mitigation processes and workflows by building and shipping an internal automated dashboard & analysis tool to address $750M+ of excess parts; presented a product demo of functionality and impact to executives and stakeholders.",
       "Collaborated cross-functionally with Supply Chain PMs, Product Ops, and Business Units to identify user pain points with current processes, exposing $5M+ in missed mitigation opportunities.",
@@ -61,6 +66,7 @@ export const experience: Experience[] = [
     end: "Aug 2022",
     location: "Fremont, CA",
     href: "https://www.jabil.com",
+    keyLearnings: "Owning a feature end-to-end under real deadlines.",
     bullets: [
       "Managed development and launch of 3 features of an internal project management tool: employee verification with the Okta Sessions API, a dynamic timeline, and a ticket-issuing system.",
       "Assisted the Software Development Manager by analyzing user feedback to prioritize product features, sprints, and backlog, and built a product roadmap — leading to a 25% improvement in productivity.",

@@ -7,4 +7,4 @@
  * once instead of in every section component.
  */
 export const SECTION_SHELL =
-  "mx-auto max-w-5xl px-4 py-[4.25rem] sm:px-6 sm:py-[5.95rem]";
+  "mx-auto max-w-5xl px-4 py-[3.61rem] sm:px-6 sm:py-[5.06rem]";

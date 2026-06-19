@@ -11,15 +11,15 @@ export function Projects() {
     <section id="projects" className="bg-muted/30">
       <div className={SECTION_SHELL}>
         <SectionHeading
-          eyebrow="02 / Projects"
-          title="Featured Projects"
-          description="A selection of projects spanning identity tooling, automation, and full-stack web. Click a tile for its demo and repo."
+          eyebrow="03 / Projects"
+          title="What I'm Working On"
+          description="Click a tile to learn more."
         />
 
-        {/* 2×2 grid of flip tiles — front summarizes, back holds the links. */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        {/* 3-up row of flip tiles — front summarizes, back holds the links. */}
+        <div className="grid gap-6 lg:grid-cols-3">
           {projects.map((project, i) => (
-            <Reveal key={project.title} delay={(i % 2) * 0.08}>
+            <Reveal key={project.title} delay={(i % 3) * 0.08}>
               <ProjectCard project={project} index={i + 1} />
             </Reveal>
           ))}

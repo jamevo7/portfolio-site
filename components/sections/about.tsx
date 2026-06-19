@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ArrowUpRight } from "lucide-react";
 
-import { about, profile, experience, type Experience } from "@/lib/data";
+import { about, experience, type Experience } from "@/lib/data";
 import { SECTION_SHELL } from "@/lib/section";
 import { IdentityCard } from "@/components/identity-card";
 import { PhotoGallery } from "@/components/photo-gallery";
@@ -21,9 +21,9 @@ function jobIdentity(job: Experience) {
     path: `/experience/${job.start.slice(-4)}/${slug}`,
     facts: [
       { label: "role", value: job.role },
-      { label: "company", value: job.company },
       { label: "period", value: `${job.start} – ${job.end}` },
       { label: "location", value: job.location },
+      { label: "Key learnings", value: job.keyLearnings },
     ],
   };
 }
@@ -44,7 +44,7 @@ export function About() {
           {/* Left column: heading sits with the bio so its top aligns with
               the photo gallery in the right column. */}
           <div className="md:col-span-2">
-            <SectionHeading eyebrow="01 / About" title="A bit about me" />
+            <SectionHeading eyebrow="02 / About" title="A bit about me" />
             <div className="space-y-4">
               {about.paragraphs.map((p, i) => (
                 <Reveal key={i} delay={i * 0.08}>
@@ -57,11 +57,13 @@ export function About() {
           </div>
 
           {/* Right column: photo gallery above the identity card (which doubles
-              as the timeline inspector). Both keep a fixed size so neither
-              resizes as the card re-types a different role. */}
-          <div className="space-y-6">
-            <Reveal>
-              <PhotoGallery />
+              as the timeline inspector). On desktop the column stretches to the
+              bio's height and the photo grows to fill, so the bottom lines up
+              with the bio's last line. The card keeps a fixed height (min-h), so
+              re-typing a different role never resizes it or jostles the photo. */}
+          <div className="flex flex-col gap-6">
+            <Reveal className="md:min-h-0 md:flex-1">
+              <PhotoGallery className="md:h-full md:aspect-auto" />
             </Reveal>
             <Reveal delay={0.08}>
               <IdentityCard path={identity.path} facts={identity.facts} />
@@ -77,14 +79,16 @@ export function About() {
               <h3 className="font-mono text-xs uppercase tracking-wider text-primary/80">
                 Where I&apos;ve been
               </h3>
-              <a
-                href={profile.resumeHref}
-                download
+              <button
+                type="button"
+                onClick={() =>
+                  window.dispatchEvent(new Event("resume:highlight"))
+                }
                 className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
                 Full history on my resume
                 <ArrowUpRight className="size-3.5" />
-              </a>
+              </button>
             </div>
           </Reveal>
           <Reveal delay={0.08}>

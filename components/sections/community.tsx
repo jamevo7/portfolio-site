@@ -12,7 +12,7 @@ export function Community() {
     <section id="community">
       <div className={SECTION_SHELL}>
         <SectionHeading
-          eyebrow="03 / Community"
+          eyebrow="04 / Community"
           title="Beyond the work"
           description={community.lede}
         />

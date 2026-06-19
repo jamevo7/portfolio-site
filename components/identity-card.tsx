@@ -80,11 +80,14 @@ export function IdentityCard({
     let raf = 0;
     setRevealed(0);
     const start = performance.now();
-    // Snappy enough to click through roles without waiting on a long decode.
-    const duration = Math.min(1600, Math.max(700, total * 16));
+    // A touch longer than before, and eased, so the decode glides on and settles
+    // instead of snapping to a stop.
+    const duration = Math.min(2200, Math.max(1100, total * 22));
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
-      setRevealed(Math.floor(t * total));
+      // smoothstep — eases both the start and the finish for a smooth landing.
+      const eased = t * t * (3 - 2 * t);
+      setRevealed(Math.floor(eased * total));
       if (t < 1) raf = requestAnimationFrame(tick);
       else setRevealed(total);
     };

@@ -29,6 +29,10 @@ export function ExperienceTimeline({
   // when the section is already on-screen at mount (e.g. after an HMR remount).
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
+  // The pointer sits under the selected role, defaulting to the most recent
+  // (last) company when nothing is selected.
+  const pointed = active ?? nodes.length - 1;
+
   return (
     <div ref={ref} className="relative">
       {/* Connecting line — full-bleed for cohesion with the quote strip above;
@@ -53,14 +57,21 @@ export function ExperienceTimeline({
                   onClick={() => onSelect(i)}
                   aria-pressed={isActive}
                   aria-label={`${node.role}, ${node.company}`}
-                  className="group relative flex size-4 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="group relative flex size-5 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
-                  {current && !reduce && (
-                    <span className="absolute inline-flex size-4 animate-ping rounded-full bg-emerald-500/50 [animation-duration:2.5s]" />
+                  {/* Heartbeat ping — on the current role, and on whichever role
+                      is pressed (active). Pressed pings primary, current emerald. */}
+                  {(isActive || current) && !reduce && (
+                    <span
+                      className={cn(
+                        "absolute inline-flex size-5 animate-ping rounded-full [animation-duration:2.5s]",
+                        isActive ? "bg-primary/50" : "bg-emerald-500/50"
+                      )}
+                    />
                   )}
                   <span
                     className={cn(
-                      "size-3.5 rounded-full ring-2 ring-background transition-all",
+                      "size-4 rounded-full ring-2 ring-background transition-all",
                       isActive
                         ? "scale-110 bg-primary"
                         : current
@@ -71,11 +82,31 @@ export function ExperienceTimeline({
                 </button>
                 <span className="mt-2 text-center font-mono text-[11px] leading-tight text-muted-foreground">
                   {node.company}
-                  <br />
-                  <span className="text-muted-foreground/60">
-                    &apos;{node.start.slice(-2)}
-                  </span>
                 </span>
+                {/* North-pointing pointer marking the selected role. Only one
+                    exists; the shared layoutId slides it between nodes. Centered
+                    under the dot/name by the column's items-center. */}
+                {i === pointed && (
+                  <motion.span
+                    layoutId="timeline-pointer"
+                    aria-hidden
+                    className="mt-1.5"
+                    transition={
+                      reduce
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 500, damping: 38 }
+                    }
+                  >
+                    <svg
+                      width="12"
+                      height="7"
+                      viewBox="0 0 12 7"
+                      className="block fill-muted-foreground/70"
+                    >
+                      <path d="M6 0 12 7 0 7Z" />
+                    </svg>
+                  </motion.span>
+                )}
               </li>
               {i < nodes.length - 1 && (
                 <li
