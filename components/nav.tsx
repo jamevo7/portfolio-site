@@ -12,6 +12,19 @@ export function Nav() {
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState<string>("");
+  // Briefly draws the eye to the Resume button when something elsewhere on the
+  // page points here (e.g. About's "Full history on my resume" link).
+  const [highlight, setHighlight] = React.useState(false);
+
+  React.useEffect(() => {
+    const onHighlight = () => {
+      setHighlight(true);
+      const t = window.setTimeout(() => setHighlight(false), 1800);
+      return () => window.clearTimeout(t);
+    };
+    window.addEventListener("resume:highlight", onHighlight);
+    return () => window.removeEventListener("resume:highlight", onHighlight);
+  }, []);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -95,10 +108,34 @@ export function Nav() {
         </div>
 
         <div className="flex items-center gap-1">
-          <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="relative hidden sm:inline-flex"
+          >
             <a href={profile.resumeHref} download>
               <FileText className="size-4" />
               Resume
+              {highlight && (
+                <svg
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 size-full overflow-visible text-primary"
+                >
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    rx="8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeDasharray="5 5"
+                    className="marching-ants"
+                  />
+                </svg>
+              )}
             </a>
           </Button>
           <ThemeToggle />

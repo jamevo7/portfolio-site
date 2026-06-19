@@ -14,11 +14,13 @@ import { cn } from "@/lib/utils";
  *
  * Dummy data for now — swap each slide's placeholder block for a real <Image>.
  */
+// Neutral placeholder tones — graded steps of the foreground so the gallery
+// reads monochrome until real photos drop in.
 const SLIDES = [
-  { caption: "mentoring", tone: "from-sky-400/30 to-blue-600/25" },
-  { caption: "volunteering", tone: "from-emerald-400/30 to-teal-600/25" },
-  { caption: "on the trail", tone: "from-amber-400/30 to-orange-600/25" },
-  { caption: "building things", tone: "from-indigo-400/30 to-violet-600/25" },
+  { caption: "mentoring", tone: "from-foreground/10 to-foreground/5" },
+  { caption: "volunteering", tone: "from-foreground/15 to-foreground/5" },
+  { caption: "on the trail", tone: "from-foreground/10 to-foreground/[0.03]" },
+  { caption: "building things", tone: "from-foreground/20 to-foreground/5" },
 ];
 
 const INTERVAL = 4500;
@@ -38,13 +40,24 @@ export function PhotoGallery({ className }: { className?: string }) {
   }, [reduce, paused]);
 
   const slide = SLIDES[index];
+  const next = () => setIndex((p) => (p + 1) % SLIDES.length);
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label="Show next photo"
       className={cn(
-        "relative aspect-[4/3] overflow-hidden rounded-xl border bg-card shadow-sm",
+        "relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border bg-card shadow-sm",
         className
       )}
+      onClick={next}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          next();
+        }
+      }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -81,7 +94,10 @@ export function PhotoGallery({ className }: { className?: string }) {
             type="button"
             aria-label={`Show ${s.caption}`}
             aria-current={i === index}
-            onClick={() => setIndex(i)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIndex(i);
+            }}
             className={cn(
               "size-1.5 rounded-full transition-colors",
               i === index
