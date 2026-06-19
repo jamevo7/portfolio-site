@@ -29,6 +29,10 @@ export function ExperienceTimeline({
   // when the section is already on-screen at mount (e.g. after an HMR remount).
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
+  // The pointer sits under the selected role, defaulting to the most recent
+  // (last) company when nothing is selected.
+  const pointed = active ?? nodes.length - 1;
+
   return (
     <div ref={ref} className="relative">
       {/* Connecting line — full-bleed for cohesion with the quote strip above;
@@ -79,6 +83,30 @@ export function ExperienceTimeline({
                 <span className="mt-2 text-center font-mono text-[11px] leading-tight text-muted-foreground">
                   {node.company}
                 </span>
+                {/* North-pointing pointer marking the selected role. Only one
+                    exists; the shared layoutId slides it between nodes. Centered
+                    under the dot/name by the column's items-center. */}
+                {i === pointed && (
+                  <motion.span
+                    layoutId="timeline-pointer"
+                    aria-hidden
+                    className="mt-1.5"
+                    transition={
+                      reduce
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 500, damping: 38 }
+                    }
+                  >
+                    <svg
+                      width="12"
+                      height="7"
+                      viewBox="0 0 12 7"
+                      className="block fill-muted-foreground/70"
+                    >
+                      <path d="M6 0 12 7 0 7Z" />
+                    </svg>
+                  </motion.span>
+                )}
               </li>
               {i < nodes.length - 1 && (
                 <li

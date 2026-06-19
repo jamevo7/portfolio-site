@@ -21,9 +21,9 @@ function jobIdentity(job: Experience) {
     path: `/experience/${job.start.slice(-4)}/${slug}`,
     facts: [
       { label: "role", value: job.role },
-      { label: "company", value: job.company },
       { label: "period", value: `${job.start} – ${job.end}` },
       { label: "location", value: job.location },
+      { label: "Key learnings", value: job.keyLearnings },
     ],
   };
 }
@@ -44,7 +44,7 @@ export function About() {
           {/* Left column: heading sits with the bio so its top aligns with
               the photo gallery in the right column. */}
           <div className="md:col-span-2">
-            <SectionHeading eyebrow="01 / About" title="A bit about me" />
+            <SectionHeading eyebrow="02 / About" title="A bit about me" />
             <div className="space-y-4">
               {about.paragraphs.map((p, i) => (
                 <Reveal key={i} delay={i * 0.08}>

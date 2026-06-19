@@ -4,7 +4,7 @@
  * repo/demo links for real URLs or remove them.
  */
 
-import { Database, ShieldCheck, UtensilsCrossed, Workflow } from "lucide-react";
+import { Database, ShieldCheck, UtensilsCrossed } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export type Project = {
@@ -84,22 +84,5 @@ export const projects: Project[] = [
     tag: "FULL-STACK WEB",
     icon: UtensilsCrossed,
     note: "nights & weekends build",
-  },
-  {
-    title: "Slack Request Router",
-    blurb: "Automation agent that triages and routes AE requests in Slack.",
-    description:
-      "A Python bot that parses inbound account-executive requests, classifies them, and routes to the right owner with SLA reminders — integrating the Slack API with an internal ticketing backend.",
-    tech: ["Python", "Slack API", "FastAPI", "PostgreSQL"],
-    highlight: "Reduced first-response time from hours to minutes",
-    highlights: [
-      "Reduced first-response time from hours to minutes",
-      "Auto-classifies & routes inbound AE requests",
-      "SLA reminders wired to internal ticketing",
-    ],
-    repo: "#",
-    tag: "AUTOMATION",
-    icon: Workflow,
-    note: "saved the team hours",
   },
 ];

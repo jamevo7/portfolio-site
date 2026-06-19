@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { motion } from "framer-motion";
 import { FileText, Menu, X } from "lucide-react";
 
 import { navLinks, profile } from "@/lib/data";
@@ -13,15 +14,12 @@ export function Nav() {
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState<string>("");
   // Briefly draws the eye to the Resume button when something elsewhere on the
-  // page points here (e.g. About's "Full history on my resume" link).
-  const [highlight, setHighlight] = React.useState(false);
+  // page points here (e.g. About's "Full history on my resume" link). Bumping a
+  // counter re-keys the flash overlay so each press restarts the fade.
+  const [flash, setFlash] = React.useState(0);
 
   React.useEffect(() => {
-    const onHighlight = () => {
-      setHighlight(true);
-      const t = window.setTimeout(() => setHighlight(false), 1800);
-      return () => window.clearTimeout(t);
-    };
+    const onHighlight = () => setFlash((n) => n + 1);
     window.addEventListener("resume:highlight", onHighlight);
     return () => window.removeEventListener("resume:highlight", onHighlight);
   }, []);
@@ -112,30 +110,33 @@ export function Nav() {
             asChild
             variant="outline"
             size="sm"
-            className="relative hidden sm:inline-flex"
+            className="relative hidden overflow-hidden sm:inline-flex"
           >
             <a href={profile.resumeHref} download>
-              <FileText className="size-4" />
-              Resume
-              {highlight && (
-                <svg
+              {/* Light-blue pulse that throbs a couple of times then fades,
+                  sitting above the button's own background; overflow-hidden clips
+                  it to the corners. The label is lifted above it with relative
+                  z-10 so it stays readable. */}
+              {flash > 0 && (
+                <motion.span
+                  key={flash}
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 size-full overflow-visible text-primary"
-                >
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    rx="8"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeDasharray="5 5"
-                    className="marching-ants"
-                  />
-                </svg>
+                  className="pointer-events-none absolute inset-0 bg-sky-200/70 dark:bg-sky-300/25"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0, 1, 0] }}
+                  transition={{
+                    // Rise (~0.33s) and fall (~0.65s) unchanged; the gap between
+                    // the two peaks is 2.1s.
+                    duration: 3.075,
+                    ease: "easeInOut",
+                    times: [0, 0.106, 0.447, 0.789, 1],
+                  }}
+                />
               )}
+              <span className="relative z-10 inline-flex items-center gap-2">
+                <FileText className="size-4" />
+                Resume
+              </span>
             </a>
           </Button>
           <ThemeToggle />

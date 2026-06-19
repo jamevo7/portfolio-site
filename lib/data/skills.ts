@@ -48,12 +48,15 @@ export const skills: SkillGroup[] = [
 export type Certification = {
   name: string;
   issuer: string;
+  // `year` is the valid-through (expiry); `issued` is when it was earned.
+  // Together they drive the validity-window bar. Dummy `issued` years for now.
+  issued: string;
   year: string;
   icon: LucideIcon;
 };
 
 export const certifications: Certification[] = [
-  { name: "Auth0 Certified Developer", issuer: "Okta / Auth0", year: "May 2026", icon: KeyRound },
-  { name: "CompTIA Security+", issuer: "CompTIA", year: "Oct 2025", icon: ShieldCheck },
-  { name: "Cloud Digital Leader", issuer: "Google", year: "Jun 2025", icon: Cloud },
+  { name: "Auth0 Certified Developer", issuer: "Okta / Auth0", issued: "2024", year: "May 2026", icon: KeyRound },
+  { name: "CompTIA Security+", issuer: "CompTIA", issued: "2022", year: "Oct 2025", icon: ShieldCheck },
+  { name: "Cloud Digital Leader", issuer: "Google", issued: "2022", year: "Jun 2025", icon: Cloud },
 ];
