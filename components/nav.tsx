@@ -64,7 +64,7 @@ export function Nav() {
           : "border-b border-transparent"
       )}
     >
-      <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
+      <nav className="mx-auto flex h-16 max-w-5xl items-center px-4 sm:px-6">
         <a href="#top" aria-label="Home" className="inline-flex items-center">
           {/* Brand mark — matches the favicon: dark blue hollow square. */}
           <svg
@@ -86,8 +86,7 @@ export function Nav() {
           </svg>
         </a>
 
-        {/* Desktop links */}
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="ml-auto hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -103,20 +102,14 @@ export function Nav() {
               {link.label}
             </a>
           ))}
-        </div>
 
-        <div className="flex items-center gap-1">
           <Button
             asChild
             variant="outline"
             size="sm"
-            className="relative hidden overflow-hidden sm:inline-flex"
+            className="relative ml-1 overflow-hidden"
           >
             <a href={profile.resumeHref} download>
-              {/* Light-blue pulse that throbs a couple of times then fades,
-                  sitting above the button's own background; overflow-hidden clips
-                  it to the corners. The label is lifted above it with relative
-                  z-10 so it stays readable. */}
               {flash > 0 && (
                 <motion.span
                   key={flash}
@@ -125,8 +118,6 @@ export function Nav() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 1, 0, 1, 0] }}
                   transition={{
-                    // Rise (~0.33s) and fall (~0.65s) unchanged; the gap between
-                    // the two peaks is 2.1s.
                     duration: 3.075,
                     ease: "easeInOut",
                     times: [0, 0.106, 0.447, 0.789, 1],
@@ -139,7 +130,11 @@ export function Nav() {
               </span>
             </a>
           </Button>
+
           <ThemeToggle />
+        </div>
+
+        <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"

@@ -3,7 +3,11 @@
 import * as React from "react";
 import { ArrowUpRight } from "lucide-react";
 
-import { about, experience, type Experience } from "@/lib/data";
+import {
+  about,
+  experience,
+  type Experience,
+} from "@/lib/data";
 import { SECTION_SHELL } from "@/lib/section";
 import { IdentityCard } from "@/components/identity-card";
 import { PhotoGallery } from "@/components/photo-gallery";
@@ -99,6 +103,7 @@ export function About() {
             />
           </Reveal>
         </div>
+
       </div>
     </section>
   );
