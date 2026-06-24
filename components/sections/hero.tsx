@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowRight, FileText, MapPin, UserRound } from "lucide-react";
 
@@ -9,9 +10,11 @@ import { Button } from "@/components/ui/button";
 import { HeroBackdrop } from "@/components/hero-backdrop";
 import { QuantumGrid } from "@/components/quantum-grid";
 import { DecipherText } from "@/components/decipher-text";
+import { ContactDialog } from "@/components/contact-dialog";
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const [contactOpen, setContactOpen] = React.useState(false);
 
   const container: Variants = {
     hidden: {},
@@ -25,6 +28,7 @@ export function Hero() {
   };
 
   return (
+    <>
     <section className="relative overflow-hidden">
       {/* Animated aurora + blueprint grid */}
       <HeroBackdrop />
@@ -79,11 +83,9 @@ export function Hero() {
           </motion.div>
 
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <a href="#contact">
-                Get in touch
-                <ArrowRight className="size-4" />
-              </a>
+            <Button size="lg" onClick={() => setContactOpen(true)}>
+              Get in touch
+              <ArrowRight className="size-4" />
             </Button>
             <Button asChild size="lg" variant="outline">
               <a href={profile.resumeHref} download>
@@ -114,5 +116,7 @@ export function Hero() {
         </div>
       </div>
     </section>
+    <ContactDialog open={contactOpen} onClose={() => setContactOpen(false)} />
+    </>
   );
 }
