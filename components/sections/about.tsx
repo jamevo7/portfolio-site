@@ -3,7 +3,11 @@
 import * as React from "react";
 import { ArrowUpRight } from "lucide-react";
 
-import { about, experience, type Experience } from "@/lib/data";
+import {
+  about,
+  experience,
+  type Experience,
+} from "@/lib/data";
 import { SECTION_SHELL } from "@/lib/section";
 import { IdentityCard } from "@/components/identity-card";
 import { PhotoGallery } from "@/components/photo-gallery";
@@ -79,16 +83,14 @@ export function About() {
               <h3 className="font-mono text-xs uppercase tracking-wider text-primary/80">
                 Where I&apos;ve been
               </h3>
-              <button
-                type="button"
-                onClick={() =>
-                  window.dispatchEvent(new Event("resume:highlight"))
-                }
+              <a
+                href="/resume.pdf"
+                download
                 className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
                 Full history on my resume
                 <ArrowUpRight className="size-3.5" />
-              </button>
+              </a>
             </div>
           </Reveal>
           <Reveal delay={0.08}>
@@ -99,6 +101,7 @@ export function About() {
             />
           </Reveal>
         </div>
+
       </div>
     </section>
   );

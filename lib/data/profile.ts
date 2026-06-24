@@ -22,7 +22,6 @@ export const profile = {
 // In-page navigation anchors.
 export const navLinks = [
   { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
+  { label: "My Work", href: "#projects" },
   { label: "Community", href: "#community" },
-  { label: "Contact", href: "#contact" },
 ] as const;

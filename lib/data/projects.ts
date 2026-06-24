@@ -4,7 +4,7 @@
  * repo/demo links for real URLs or remove them.
  */
 
-import { Database, ShieldCheck, UtensilsCrossed } from "lucide-react";
+import { Database, Globe, ShieldCheck, Terminal, UtensilsCrossed } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export type Project = {
@@ -84,5 +84,40 @@ export const projects: Project[] = [
     tag: "FULL-STACK WEB",
     icon: UtensilsCrossed,
     note: "nights & weekends build",
+  },
+  {
+    title: "Auth0 Tenant Health CLI",
+    blurb: "CLI that audits an Auth0 tenant against security best practices and outputs a scored report.",
+    description:
+      "A Node.js CLI tool that connects to the Auth0 Management API, audits tenant configuration (MFA enforcement, token lifetimes, Refresh Token Rotation, brute-force protection, and more) against security best practices, and outputs a weighted health score with remediation guidance — runnable in CI or as a one-off check.",
+    tech: ["TypeScript", "Node.js", "Auth0 Management API", "Commander.js"],
+    highlight: "Catches ~12 common misconfigs in under 10 seconds",
+    highlights: [
+      "Catches ~12 common misconfigs in under 10 seconds",
+      "Weighted scoring with per-finding remediation steps",
+      "CI-ready — exits non-zero on critical failures",
+    ],
+    repo: "#",
+    tag: "IDENTITY TOOLING",
+    icon: Terminal,
+    note: "runs in CI",
+  },
+  {
+    title: "This Portfolio",
+    blurb: "The site you're on — designed and built from scratch with Next.js, Tailwind v4, and Framer Motion.",
+    description:
+      "A hand-crafted portfolio and resume API built with Next.js App Router, TypeScript strict mode, Tailwind CSS v4, and Framer Motion. Features a blueprint-style project bento, interactive experience timeline, identity card with typewriter animation, and a `/api/resume` endpoint for programmatic access.",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Vercel"],
+    highlight: "Built in public — see the commit history",
+    highlights: [
+      "Blueprint bento grid with hover-reveal project cards",
+      "Interactive timeline with animated identity card",
+      "Resume API endpoint at /api/resume",
+    ],
+    demo: "#",
+    repo: "#",
+    tag: "PERSONAL SITE",
+    icon: Globe,
+    note: "you're looking at it",
   },
 ];

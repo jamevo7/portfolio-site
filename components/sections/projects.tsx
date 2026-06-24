@@ -6,6 +6,18 @@ import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 
+// Bento spans (lg+): a 2×2 feature tile anchors the left; a wide tile fills the
+// top-right; three equal accent tiles split the bottom-right — creating a
+// cross-weighted layout that's symmetric on the right side while the feature
+// tile provides the asymmetric anchor.
+const TILE_SPANS = [
+  "lg:col-span-2 lg:row-span-2", // feature — left anchor
+  "lg:col-span-3",               // wide — top right
+  "lg:col-span-1",               // accent — bottom right ×3
+  "lg:col-span-1",
+  "lg:col-span-1",
+];
+
 export function Projects() {
   return (
     <section id="projects" className="bg-muted/30">
@@ -16,10 +28,15 @@ export function Projects() {
           description="Click a tile to learn more."
         />
 
-        {/* 3-up row of flip tiles — front summarizes, back holds the links. */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        {/* Bento of differently-shaped tiles — a feature square plus two wide
+            tiles; each reveals its details on hover/tap. */}
+        <div className="grid grid-cols-1 gap-4 lg:auto-rows-[15rem] lg:grid-cols-5">
           {projects.map((project, i) => (
-            <Reveal key={project.title} delay={(i % 3) * 0.08}>
+            <Reveal
+              key={project.title}
+              delay={(i % 3) * 0.08}
+              className={TILE_SPANS[i] ?? "lg:col-span-1"}
+            >
               <ProjectCard project={project} index={i + 1} />
             </Reveal>
           ))}
