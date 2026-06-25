@@ -15,18 +15,24 @@
 
 // Positioned as a fraction of the full document height, alternating sides so
 // the glow weaves down the page rather than stacking in one column.
+//
+// Each blob is a soft *radial gradient* rather than a blurred solid. Visually
+// near-identical to a heavy `blur-[100px]` circle, but it skips the filter
+// pipeline entirely — six full-page blur filters were the page's biggest paint
+// cost and the main source of scroll lag. Gradients paint cheaply and compose
+// for free. Colors are CSS-var driven so the wash still adapts to light/dark.
 const blobs = [
   // intro — two overlapping blobs concentrate the wash behind the name/hero
-  "right-[6%] top-[5%] size-[460px] bg-primary/25",
-  "left-[-6%] top-[12%] size-[420px] bg-blue-500/18",
+  { pos: "right-[6%] top-[5%]", size: 460, color: "var(--primary)", alpha: 25 },
+  { pos: "left-[-6%] top-[12%]", size: 420, color: "#3b82f6", alpha: 18 },
   // about / quote strip — right
-  "right-[2%] top-[32%] size-[400px] bg-blue-600/14",
+  { pos: "right-[2%] top-[32%]", size: 400, color: "#2563eb", alpha: 14 },
   // projects / skills — left
-  "left-[2%] top-[52%] size-[420px] bg-primary/13",
+  { pos: "left-[2%] top-[52%]", size: 420, color: "var(--primary)", alpha: 13 },
   // contact — right
-  "right-[8%] top-[74%] size-[380px] bg-blue-600/14",
+  { pos: "right-[8%] top-[74%]", size: 380, color: "#2563eb", alpha: 14 },
   // bottom-left — a stronger anchor so the lower-left corner isn't bare
-  "left-[-8%] top-[88%] size-[480px] bg-primary/16",
+  { pos: "left-[-8%] top-[88%]", size: 480, color: "var(--primary)", alpha: 16 },
 ];
 
 export function PageAura() {
@@ -35,10 +41,15 @@ export function PageAura() {
       aria-hidden
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
-      {blobs.map((blob, i) => (
+      {blobs.map((b, i) => (
         <div
           key={i}
-          className={`absolute rounded-full blur-[100px] ${blob}`}
+          className={`absolute rounded-full ${b.pos}`}
+          style={{
+            width: b.size,
+            height: b.size,
+            background: `radial-gradient(circle, color-mix(in oklch, ${b.color} ${b.alpha}%, transparent) 0%, transparent 70%)`,
+          }}
         />
       ))}
     </div>

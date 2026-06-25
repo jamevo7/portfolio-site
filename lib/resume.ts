@@ -90,13 +90,18 @@ export function toJsonResume() {
       name: group.label,
       keywords: group.items,
     })),
-    projects: projects.map((project) => ({
-      name: project.title,
-      description: project.description,
-      highlights: [project.highlight],
-      keywords: project.tech,
-      url: project.demo && project.demo !== "#" ? project.demo : undefined,
-    })),
+    // Only real, verified projects reach the resume — placeholder/showcase
+    // entries (real !== true) are excluded so the API never asserts fabricated
+    // work. See the `real` flag in lib/data/projects.ts.
+    projects: projects
+      .filter((project) => project.real)
+      .map((project) => ({
+        name: project.title,
+        description: project.description,
+        highlights: [project.highlight],
+        keywords: project.tech,
+        url: project.demo && project.demo !== "#" ? project.demo : undefined,
+      })),
     meta: {
       canonical: "/api/resume",
       version: "1.0.0",
@@ -171,7 +176,7 @@ export function toPlainText(): string {
   lines.push(rule);
   lines.push("PROJECTS");
   lines.push(rule);
-  for (const project of projects) {
+  for (const project of projects.filter((p) => p.real)) {
     lines.push(project.title);
     lines.push(`  ${wrap(project.description, "  ")}`);
     lines.push(`  Tech: ${project.tech.join(", ")}`);

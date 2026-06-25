@@ -23,6 +23,8 @@ interface Props {
 export function ContactDialog({ open, onClose }: Props) {
   const [mounted, setMounted] = React.useState(false);
   const honeypotRef = React.useRef<HTMLInputElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
+  const lastFocusedRef = React.useRef<HTMLElement | null>(null);
 
   const {
     register,
@@ -33,13 +35,52 @@ export function ContactDialog({ open, onClose }: Props) {
 
   React.useEffect(() => setMounted(true), []);
 
+  // Focus management + trap: a custom modal must move focus into the dialog on
+  // open, keep Tab cycling inside it, and restore focus to the trigger on close
+  // — otherwise keyboard/screen-reader users can Tab out into the page behind
+  // the overlay (the modal's whole purpose is to be modal).
   React.useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    lastFocusedRef.current = document.activeElement as HTMLElement | null;
+
+    const focusable = () => {
+      const root = dialogRef.current;
+      if (!root) return [] as HTMLElement[];
+      return Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, [tabindex]'
+        )
+      ).filter((el) => el.tabIndex !== -1 && el.offsetParent !== null);
     };
+
+    // Move focus into the dialog (first field).
+    focusable()[0]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusable();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      // Restore focus to whatever opened the dialog.
+      lastFocusedRef.current?.focus?.();
+    };
   }, [open, onClose]);
 
   // Prevent body scroll while modal is open.
@@ -105,6 +146,7 @@ export function ContactDialog({ open, onClose }: Props) {
 
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label="Contact form"

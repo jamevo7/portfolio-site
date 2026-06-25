@@ -1,23 +1,29 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+
+import { GRID_CELL as CELL } from "@/lib/grid";
 
 /**
- * "Quantum fluctuation" layer for the hero: full grid cells momentarily light
- * up — fade in, hold, fade out — sometimes seeding a neighbour of an already-lit
- * cell so fluctuations cluster over time (never two in the same instant).
+ * "Quantum fluctuation" layer for the hero: grid cells momentarily light up —
+ * fade in, hold, fade out — sometimes seeding a neighbour of an already-lit cell
+ * so fluctuations cluster over time.
  *
- * Alignment: the lit cells live on the SAME fixed, viewport-anchored 56px
- * lattice as PageGrid, so they always coincide exactly with the visible
- * gridlines regardless of scroll. A clip-path limits them to the hero's
- * on-screen band. Each cell is a full 56×56 fill. Purely decorative: hidden
- * from assistive tech, nothing under prefers-reduced-motion.
+ * Performance / alignment: the lit cells render in a *fixed*, viewport-anchored
+ * layer — the same reference frame as PageGrid — so they stay locked to the
+ * blueprint lattice and never slide while you scroll (the earlier `absolute`
+ * version scrolled with the hero and drifted off the fixed gridlines mid-fade).
+ * A separate, empty in-hero sentinel is measured (ResizeObserver) and watched
+ * (IntersectionObserver) only to size the spawn region and idle the loop once
+ * the hero leaves view — so there's still no scroll listener, no per-frame
+ * `getBoundingClientRect`, and no clip-path. Cells are plain divs animated by a
+ * CSS keyframe (`quantum-fade` in globals.css) and removed on `animationend`,
+ * so there's no animation-library runtime either. Purely decorative; disabled
+ * under prefers-reduced-motion.
  */
 
-const CELL = 56; // must match PageGrid's backgroundSize
 const MAX = 6; // hard cap on concurrent lit cells
-const SKIP_TOP_ROWS = 2; // never light the top rows of the hero
+const SKIP_TOP_ROWS = 2; // never light the rows under the nav
 
 // Four shades of the same blue — one is picked at random per cell.
 const COLORS = [
@@ -30,54 +36,61 @@ const COLORS = [
 type Region = { colMax: number; rowMin: number; rowMax: number };
 type Cell = { id: number; x: number; y: number; color: string };
 
+function usePrefersReducedMotion() {
+  const [reduce, setReduce] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduce(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return reduce;
+}
+
 export function QuantumGrid() {
-  const reduce = useReducedMotion();
-  const probeRef = React.useRef<HTMLDivElement>(null);
+  const reduce = usePrefersReducedMotion();
+  const layerRef = React.useRef<HTMLDivElement>(null);
+  const regionRef = React.useRef<Region>({
+    colMax: 0,
+    rowMin: SKIP_TOP_ROWS,
+    rowMax: -1,
+  });
+  const visibleRef = React.useRef(true);
   const idRef = React.useRef(0);
   const cellsRef = React.useRef<Cell[]>([]);
-  const regionRef = React.useRef<Region>({ colMax: 0, rowMin: SKIP_TOP_ROWS, rowMax: -1 });
-  const [clip, setClip] = React.useState("inset(0 0 100% 0)");
   const [cells, setCells] = React.useState<Cell[]>([]);
 
-  // Track the hero's on-screen rectangle → clip band + spawnable cell range,
-  // both expressed in fixed viewport-grid coordinates.
+  // Measure the hero's cell grid once (and on resize) — no scroll work.
   React.useEffect(() => {
     if (reduce) return;
-    let raf = 0;
+    const el = layerRef.current;
+    if (!el) return;
     const measure = () => {
-      const el = probeRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const top = Math.max(r.top, 0);
-      const bottom = Math.min(r.bottom, vh);
-      setClip(`inset(${top}px 0px ${Math.max(vh - bottom, 0)}px 0px)`);
       regionRef.current = {
-        colMax: Math.floor(vw / CELL) - 1,
-        rowMin: Math.ceil(top / CELL) + SKIP_TOP_ROWS,
-        rowMax: Math.floor(bottom / CELL) - 1,
+        colMax: Math.floor(el.clientWidth / CELL) - 1,
+        rowMin: SKIP_TOP_ROWS,
+        rowMax: Math.floor(el.clientHeight / CELL) - 1,
       };
     };
-    const onChange = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(measure);
-    };
     measure();
-    window.addEventListener("scroll", onChange, { passive: true });
-    window.addEventListener("resize", onChange);
-    const ro = new ResizeObserver(onChange);
-    if (probeRef.current) ro.observe(probeRef.current);
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    // Idle the spawn loop while the hero is scrolled out of view.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting;
+      },
+      { rootMargin: "0px" }
+    );
+    io.observe(el);
     return () => {
-      window.removeEventListener("scroll", onChange);
-      window.removeEventListener("resize", onChange);
       ro.disconnect();
-      cancelAnimationFrame(raf);
+      io.disconnect();
     };
   }, [reduce]);
 
-  // Spawn loop: one cell at a time. ~25% land next to an existing cell
-  // (clustering); those carry extra delay so two never pop in together.
+  // Spawn loop: one cell at a time, ~25% adjacent to an existing one.
   React.useEffect(() => {
     if (reduce) return;
     let timer: number;
@@ -85,14 +98,17 @@ export function QuantumGrid() {
       const region = regionRef.current;
       const prev = cellsRef.current;
       let extra = 0;
-      const usable = region.rowMax >= region.rowMin && region.colMax >= 0;
+      const usable =
+        visibleRef.current &&
+        region.rowMax >= region.rowMin &&
+        region.colMax >= 0;
       if (usable && prev.length < MAX) {
         const adj =
           prev.length > 0 && Math.random() < 0.25
             ? adjacentToExisting(prev, region, idRef)
             : null;
         const cell = adj ?? randomCell(region, idRef);
-        if (adj) extra = 700; // keep clustered spawns from appearing in sync
+        if (adj) extra = 700; // de-sync clustered spawns
         const updated = [...prev, cell].slice(0, MAX);
         cellsRef.current = updated;
         setCells(updated);
@@ -112,33 +128,35 @@ export function QuantumGrid() {
 
   return (
     <>
-      {/* In-flow probe: measures the hero's on-screen rect. */}
-      <div ref={probeRef} aria-hidden className="pointer-events-none absolute inset-0 -z-10" />
-      {/* Fixed, viewport-aligned cell layer clipped to the hero band. */}
+      {/* Empty sentinel in the hero's flow — measured (ResizeObserver) and
+          visibility-watched (IntersectionObserver) only; renders nothing. */}
+      <div
+        ref={layerRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+      />
+      {/* Lit cells live in a fixed, viewport-anchored layer (same frame as
+          PageGrid) so they stay on the blueprint lattice and don't move when
+          the page scrolls. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10"
-        style={{ clipPath: clip }}
+        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <AnimatePresence>
-          {cells.map((c) => (
-            <motion.span
-              key={c.id}
-              className={`absolute ${c.color}`}
-              style={{
-                left: c.x * CELL,
-                top: c.y * CELL,
-                width: CELL,
-                height: CELL,
-              }}
-              initial={{ opacity: 0 }}
-              // fade-in 0.8s · hold ~1.2s · fade-out 2s (total 4s)
-              animate={{ opacity: [0, 0.12, 0.12, 0] }}
-              transition={{ duration: 4, times: [0, 0.2, 0.5, 1], ease: "easeInOut" }}
-              onAnimationComplete={() => remove(c.id)}
-            />
-          ))}
-        </AnimatePresence>
+        {cells.map((c) => (
+          <div
+            key={c.id}
+            className={`absolute ${c.color}`}
+            style={{
+              left: c.x * CELL,
+              top: c.y * CELL,
+              width: CELL,
+              height: CELL,
+              opacity: 0,
+              animation: "quantum-fade 4s ease-in-out forwards",
+            }}
+            onAnimationEnd={() => remove(c.id)}
+          />
+        ))}
       </div>
     </>
   );
@@ -152,7 +170,10 @@ function pickColor() {
   return COLORS[Math.floor(Math.random() * COLORS.length)];
 }
 
-function randomCell(region: Region, idRef: React.MutableRefObject<number>): Cell {
+function randomCell(
+  region: Region,
+  idRef: React.MutableRefObject<number>
+): Cell {
   return {
     id: idRef.current++,
     x: rand(0, region.colMax),

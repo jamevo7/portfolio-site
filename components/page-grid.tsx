@@ -1,3 +1,5 @@
+import { GRID_CELL } from "@/lib/grid";
+
 /**
  * Page-wide "blueprint" grid. A single fixed, viewport-filling layer that sits
  * behind all content so the grid stays perfectly consistent as the page
@@ -12,7 +14,7 @@ export function PageGrid() {
       style={{
         backgroundImage:
           "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-        backgroundSize: "56px 56px",
+        backgroundSize: `${GRID_CELL}px ${GRID_CELL}px`,
       }}
     />
   );

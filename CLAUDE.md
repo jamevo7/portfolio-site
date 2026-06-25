@@ -8,11 +8,12 @@ James Vo's personal portfolio site — the primary point of contact for career a
 
 ## Stack
 
-- Framework: Next.js (App Router) — change if you're on Astro/Vite/other  
+- Framework: Next.js 15 (App Router), React 19  
 - Language: TypeScript (strict mode)  
-- Styling: Tailwind CSS  
-- Hosting:   
-- Resume API: 
+- Styling: Tailwind CSS v4  
+- Hosting: Vercel (code assumes it — see middleware CSP, client-ip proxy hops)  
+- Resume API: `GET /api/resume` — same data serialized to JSON Resume / plain text  
+- Email: Resend (contact form), behind in-memory rate limiting + honeypot  
 
 ## Conventions
 
@@ -51,7 +52,8 @@ This repo is set up for parallel agent work via worktrees. Independent features 
 - Dev server: `npm run dev`  
 - Build: `npm run build`  
 - Lint: `npm run lint`  
-- Test: `npm run test`
+- Type-check: `npx tsc --noEmit`  
+- Test: `npm run test` (Vitest — resume serialization suite in `lib/resume.test.ts`)
 
 ## Scoped context
 
