@@ -37,16 +37,6 @@ export function Footer() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full"
-              onClick={() => setContactOpen(true)}
-            >
-              <Mail className="size-4" />
-              Contact me
-            </Button>
-
             <div className="flex items-center gap-1">
               {socials.map(({ label, href, Icon }) => (
                 <a
@@ -61,6 +51,16 @@ export function Footer() {
                 </a>
               ))}
             </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => setContactOpen(true)}
+            >
+              <Mail className="size-4" />
+              Contact me
+            </Button>
           </div>
         </div>
       </footer>

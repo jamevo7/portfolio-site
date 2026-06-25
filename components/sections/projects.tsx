@@ -25,7 +25,7 @@ export function Projects() {
         <SectionHeading
           eyebrow="03 / Projects"
           title="What I'm Working On"
-          description="Click a tile to learn more."
+          description="Hover a tile and click through for the full story."
         />
 
         {/* Bento of differently-shaped tiles — a feature square plus two wide
