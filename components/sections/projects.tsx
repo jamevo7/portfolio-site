@@ -23,9 +23,8 @@ export function Projects() {
     <section id="projects" className="bg-muted/30">
       <div className={SECTION_SHELL}>
         <SectionHeading
-          eyebrow="03 / Projects"
-          title="What I'm Working On"
-          description="Hover a tile and click through for the full story."
+          eyebrow="02 / My Work"
+          
         />
 
         {/* Bento of differently-shaped tiles — a feature square plus two wide

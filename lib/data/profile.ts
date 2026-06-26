@@ -13,15 +13,17 @@ export const profile = {
   email: "jamesvo2468@gmail.com",
   // TODO: replace with your real profile URLs
   links: {
-    linkedin: "https://www.linkedin.com/in/jamesvo",
-    github: "https://github.com/jamesvo",
+    linkedin: "https://www.linkedin.com/in/jamsvo/",
+    github: "https://github.com/jamevo7",
   },
   resumeHref: "/resume.pdf",
 } as const;
 
-// In-page navigation anchors.
+// Top-level routes shown in the nav. Work is the landing page (/); About, More,
+// and Blog are their own routes.
 export const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "My Work", href: "#projects" },
-  { label: "Community", href: "#community" },
+  { label: "Work", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "More", href: "/more" },
+  { label: "Blog", href: "/blog" },
 ] as const;

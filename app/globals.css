@@ -117,6 +117,9 @@
 }
 
 html {
+  /* Nudge the root size up from the 16px default so all rem-based text scales
+     up a touch site-wide. Spacing (also rem-based) scales proportionally. */
+  font-size: 17px;
   scroll-behavior: smooth;
   /* offset for sticky header when jumping to anchors */
   scroll-padding-top: 5rem;
