@@ -19,20 +19,10 @@ export function Footer() {
   return (
     <>
       <footer className="border-t border-border/60">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
-          <div className="flex flex-col items-center gap-1.5 sm:items-start">
-            <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} {profile.name}. Built with
-              Next.js &amp; Tailwind CSS.
-            </p>
-            <p className="font-mono text-xs text-muted-foreground/70">
-              psst — my resume is an API:{" "}
-              <a
-                href="/api/resume"
-                className="underline decoration-dotted underline-offset-2 transition-colors hover:text-foreground"
-              >
-                curl /api/resume
-              </a>
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
+          <div className="flex flex-col items-center sm:items-start">
+            <p className="font-mono text-sm font-medium tracking-wider text-primary">
+              Designed & Built by James :3
             </p>
           </div>
 
@@ -47,7 +37,7 @@ export function Footer() {
                   aria-label={label}
                   className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 >
-                  <Icon className="size-5" />
+                  <Icon className="size-[1.4375rem]" />
                 </a>
               ))}
             </div>

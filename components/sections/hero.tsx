@@ -34,7 +34,7 @@ export function Hero() {
       <HeroBackdrop />
       {/* Quantum-fluctuation cells lighting up over the grid */}
       <QuantumGrid />
-      <div className="mx-auto flex min-h-[88vh] max-w-5xl items-center px-4 pt-16 sm:px-6">
+      <div className="mx-auto flex min-h-[80vh] max-w-7xl items-center px-4 pt-16 sm:px-6">
         <div className="flex w-full flex-col items-center gap-12 md:flex-row md:justify-between md:gap-10">
         <motion.div
           variants={container}
@@ -42,23 +42,9 @@ export function Hero() {
           animate="show"
           className="w-full max-w-xl"
         >
-          <motion.div variants={item}>
-            <motion.span
-              whileHover={reduce ? undefined : { skewX: -5, x: 2 }}
-              transition={{ type: "spring", stiffness: 320, damping: 14 }}
-              className="inline-flex origin-left items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-sm text-muted-foreground"
-            >
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75 [animation-duration:3s]" />
-                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-              </span>
-              Open to coffee chats &amp; collaboration
-            </motion.span>
-          </motion.div>
-
           <motion.h1
             variants={item}
-            className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl"
+            className="font-display text-6xl font-semibold tracking-tight sm:text-7xl md:text-8xl"
           >
             <DecipherText
               text={profile.name}
@@ -88,9 +74,13 @@ export function Hero() {
               <ArrowRight className="size-4" />
             </Button>
             <Button asChild size="lg" variant="outline">
-              <a href={profile.resumeHref} download>
+              <a
+                href={profile.resumeHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FileText className="size-4" />
-                Download Resume
+                View Resume
               </a>
             </Button>
           </motion.div>
@@ -104,7 +94,7 @@ export function Hero() {
           transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.2 }}
           className="shrink-0"
         >
-          <div className="relative flex aspect-[4/5] w-56 flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-gradient-to-b from-muted/60 to-muted/10 text-muted-foreground shadow-sm sm:w-64 md:w-72">
+          <div className="relative flex aspect-[4/5] w-72 flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-gradient-to-b from-muted/60 to-muted/10 text-muted-foreground shadow-sm sm:w-80 md:w-[22rem]">
             <span
               aria-hidden
               className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-primary/10"

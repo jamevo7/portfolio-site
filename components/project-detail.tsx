@@ -25,7 +25,7 @@ export function ProjectDetail({ project }: { project: Project }) {
     <>
       {/* Header — extra top padding clears the fixed nav bar. */}
       <header className="border-b border-border/60">
-        <div className="mx-auto max-w-5xl px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-32">
+        <div className="mx-auto max-w-7xl px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-32">
           <Reveal>
             <p className="mb-2 font-mono text-sm font-medium tracking-wider text-primary">
               {project.company}

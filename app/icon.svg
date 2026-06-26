@@ -1,5 +1,16 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Dark blue hollow square -->
-  <rect x="6" y="6" width="20" height="20" rx="3"
-        fill="none" stroke="#1E3A8A" stroke-width="3"/>
+  <!-- Rounded blue square favicon with a 2x2 diagonal grid hatch clipped to the square -->
+  <defs>
+    <clipPath id="squareClip">
+      <rect x="-0.25" y="-0.25" width="32.5" height="32.5" rx="8.75"/>
+    </clipPath>
+  </defs>
+  <rect x="-0.25" y="-0.25" width="32.5" height="32.5" rx="8.75" fill="#1E3A8A"/>
+  <g clip-path="url(#squareClip)">
+    <g stroke="#ffffff" stroke-width="3.36" transform="rotate(45 16 16)">
+      <!-- one vertical + one horizontal midline; clip trims them into the corners -->
+      <line x1="16" y1="-8" x2="16" y2="40"/>
+      <line x1="-8" y1="16" x2="40" y2="16"/>
+    </g>
+  </g>
 </svg>

@@ -48,7 +48,7 @@ export function About() {
           {/* Left column: heading sits with the bio so its top aligns with
               the photo gallery in the right column. */}
           <div className="md:col-span-2">
-            <SectionHeading eyebrow="02 / About" title="A bit about me" />
+            <SectionHeading eyebrow="03 / About" title="A bit about me" />
             <div className="space-y-4">
               {about.paragraphs.map((p, i) => (
                 <Reveal key={i} delay={i * 0.08}>
@@ -85,7 +85,8 @@ export function About() {
               </h3>
               <a
                 href="/resume.pdf"
-                download
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
                 Full history on my resume
@@ -95,6 +96,7 @@ export function About() {
           </Reveal>
           <Reveal delay={0.08}>
             <ExperienceTimeline
+              orientation="horizontal"
               nodes={NODES}
               active={active}
               onSelect={(i) => setActive((p) => (p === i ? null : i))}

@@ -35,12 +35,12 @@ const caveat = Caveat({
   display: "swap",
 });
 
-const siteUrl = "https://jamesvo.dev";
+const siteUrl = "https://jamesvo.site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "James' Portfolio Site",
+    default: "James Vo Portfolio",
     template: `%s — ${profile.name}`,
   },
   description:
